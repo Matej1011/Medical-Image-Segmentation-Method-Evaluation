@@ -20,8 +20,16 @@ mask1_data = (mask1_data > 0).astype(int)
 mask2_data = (mask2_data > 0).astype(int)
 
 intersection_data = np.logical_and(mask1_data, mask2_data).astype(int)
+union_data = np.logical_or(mask1_data, mask2_data).astype(int)
 
 intersect_num = np.sum(intersection_data)
+union_num = np.sum(union_data)
+
+#make sure we're not dividing by 0
+if union_num != 0:
+    iou_num = intersect_num / union_num * 100
+else:
+    iou_num = 0
 
 #to make sure there is something there...
 print(mask1_data.max())
@@ -31,3 +39,5 @@ print(mask2_data.sum())
 
 #hopefully a number that makes sense
 print(f"Intersection number = {intersect_num}")
+print(f"Union number = {union_num}")
+print(f"IOU (%): {iou_num}")
