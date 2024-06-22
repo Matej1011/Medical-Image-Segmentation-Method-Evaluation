@@ -1,43 +1,95 @@
+
 import nibabel as nib
 import numpy as np
 import os
+import fnmatch
 
-#directories in which I saved the nifti files (mask 1 is the ground truth file)
-mask1_path = r'C:\Users\mijan\Desktop\Summer Research\rsna-cspine-segmentations\segmentations\1.2.826.0.1.3680043.780.nii'
-mask2_path = r'C:\Users\mijan\Desktop\Summer Research\rsna-cspine-segmentations\nifti_source_files_segmentations\1.2.826.0.1.3680043.780\segmentations\vertebrae_C1.nii.gz'
+def search_files(directory, pattern):
+    matches = []
+    for root, dirnames, filenames in os.walk(directory):
+        for filename in fnmatch.filter(filenames, pattern):
+            matches.append(os.path.join(root, filename))
+    return matches
 
-mask1_img = nib.load(mask1_path)
-mask2_img = nib.load(mask2_path)
+dir = r'C:\Users\mijan\Desktop\Summer Research\rsna-cspine-segmentations\nifti_source_files_segmentations'
+compressed_niftis = search_files(dir, '*nii.gz')
 
-mask1_data = mask1_img.get_fdata()
-mask2_data = mask2_img.get_fdata()
+dir = r'C:\Users\mijan\Desktop\Summer Research\rsna-cspine-segmentations'
+files = search_files(dir, '*.nii')
 
-#checking shape of the two masks to make sure they are the same
-print(f"Shape of mask1: {mask1_data.shape}")
-print(f"Shape of mask2: {mask2_data.shape}")
+sum = 0
+total_iou = 0
 
-mask1_data = (mask1_data > 0).astype(int)
-mask2_data = (mask2_data > 0).astype(int)
+#this loops through the masks/segmentations from totalSegmentator
+for segmentations in compressed_niftis:
+    sum = sum+1
+print('Segmentations: ')
+print(sum)
 
-intersection_data = np.logical_and(mask1_data, mask2_data).astype(int)
-union_data = np.logical_or(mask1_data, mask2_data).astype(int)
+sum = 0
+#this loops through the ground truths
+for niftis in files:
+    sum=sum+1
+print('Ground truths: ')
+print(sum)
 
-intersect_num = np.sum(intersection_data)
-union_num = np.sum(union_data)
+def calculate_IOU(ground_truth_directory, mask_directory, segmentation_num):
 
-#make sure we're not dividing by 0
-if union_num != 0:
-    iou_num = intersect_num / union_num * 100
-else:
-    iou_num = 0
+    # Load the NIfTI files
+    #mask 1 is ground truth
+    
+    ground_truth_img = nib.load(ground_truth_directory)
+    mask_img = nib.load(mask_directory)
 
-#to make sure there is something there...
-print(mask1_data.max())
-print(mask1_data.sum())
-print(mask2_data.max())
-print(mask2_data.sum())
+    # Get the data from the NIfTI images
+    ground_truth_data = ground_truth_img.get_fdata()
+    mask_data = mask_img.get_fdata()
 
-#hopefully a number that makes sense
-print(f"Intersection number = {intersect_num}")
-print(f"Union number = {union_num}")
-print(f"IOU (%): {iou_num}")
+    #print(f"Shape of mask1: {ground_truth_data.shape}")
+    #print(f"Shape of mask2: {mask_data.shape}")
+
+    # Ensure the masks are binary (values 0 or 1)
+    ground_truth_data = (ground_truth_data > 0).astype(int)
+    mask_data = (mask_data > 0).astype(int)
+
+    # Calculate the intersection of the masks
+    intersection_data = np.logical_and(ground_truth_data, mask_data).astype(int)
+    union_data = np.logical_or(ground_truth_data, mask_data).astype(int)
+
+    intersect_num = np.sum(intersection_data)
+    union_num = np.sum(union_data)
+    if union_num != 0:
+        iou_num = intersect_num / union_num * 100
+    else:
+        iou_num = 0
+    
+    #print(mask1_data.max())
+    #print(mask1_data.sum())
+    #print(mask2_data.max())
+    #print(mask2_data.sum())
+
+    #print(f"Intersection number = {intersect_num}")
+    #print(f"Union number = {union_num}")
+    #print(f"IOU (%): {iou_num}")
+    
+    print("Mask #: ", seg_num)
+
+    return iou_num
+
+
+#iterate through the list of segmentations and add to the total IOU score (which will probably have to be changed)
+GT_index = -1
+mask_index = 0
+seg_num = 1
+patient_num = 1
+
+for gt in files:
+    GT_index += 1
+    mask_index +=1
+    print("IOU: ", total_iou)
+    print("Patient #: ", patient_num)
+    patient_num += 1
+    for i in range(8):
+        total_iou += calculate_IOU(files[GT_index], compressed_niftis[mask_index], seg_num)
+        mask_index +=1
+        seg_num += 1
