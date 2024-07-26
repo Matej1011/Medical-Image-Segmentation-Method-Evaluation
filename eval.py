@@ -13,13 +13,13 @@ def search_files(directory, pattern):
             matches.append(os.path.join(root, filename))
     return matches
 
+# Below are the root directories containing the masks from total segmentator and ground truth files
+# I've checked the contents of these and made sure they have the correct files and they correctly gather and organize them
 dir = r'C:\Users\mijan\Desktop\Summer Research\rsna-cspine-segmentations\nifti_source_files_segmentations'
 TS_masks = search_files(dir, '*nii.gz')
 
 dir = r'C:\Users\mijan\Desktop\Summer Research\rsna-cspine-segmentations'
 GT_files = search_files(dir, '*.nii')
-
-
 
 total_iou = 0
 segment_IOU = 0
@@ -49,8 +49,8 @@ def calculate_IOU(ground_truth_data, mask_directory, i):
 
     return iou_num
 
-mask_index = 1
-patient_num = 0
+mask_index = 1 #used to move through TS_masks and compare the correct generated masks with ground truth files
+patient_num = 0 #This is just so that I can print something out every iteration and I know the code is running properly
 iou = 0
 
 #list to hold the averages of each segment's IOU
@@ -73,7 +73,7 @@ for gt in GT_files:
     iou = 0
     print("Files processed: ", patient_num)
 
-#Rest is just printing out results
+# The rest below is just printing out results
 print("Average of all IOUs: ", (total_iou / 87 / 8))
 
 for i in range(8):
