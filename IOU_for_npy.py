@@ -34,7 +34,7 @@ def write_info(data):
 
 def calculate_IOU(ground_truth_data, mask_directory, i):
 
-    # Load the NIfTI file for the mask
+    # Load the numpy file for the mask
     mask_img = np.load(mask_directory)
 
     mask_img = cv2.rotate(mask_img, cv2.ROTATE_90_CLOCKWISE)
@@ -68,7 +68,7 @@ mask_index = 0
 iou = 0
 slice_num = 0
 
-#list to hold the averages of each segment's IOU
+#list to hold slice # and IOU
 patient_data = ['', 0, 0]
 
 gt = r"C:\Users\mijan\Desktop\Summer Research\rsna-cspine-segmentations\segmentations\1.2.826.0.1.3680043.10633.nii"
@@ -87,9 +87,7 @@ for i in range(30):
     else:
         patient_data[0] = gt[99:102:1]
 
-    #after loading one of the ground truth files, compare it with masks for C1 to T1 (8 total) and track value for overall IOU and for each segment
-    #also update value for each segment of specific patient
-
+    #used to make sure the correct mask is being compared with the correct slice because the array is not organized correctly
     while slice_num != i:
         mask_index += 1
         slice_num = set_slice_num(mask_index, i)
