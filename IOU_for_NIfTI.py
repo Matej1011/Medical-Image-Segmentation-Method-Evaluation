@@ -1,3 +1,5 @@
+#The code used to get IOU values for TotalSegmentator's masks (saved as .nii.gz files)
+
 import nibabel as nib
 import numpy as np
 import os
@@ -11,16 +13,18 @@ def search_files(directory, pattern):
             matches.append(os.path.join(root, filename))
     return matches
 
-dir = r'C:\Users\mijan\Desktop\Summer Research\rsna-cspine-segmentations\nifti_source_files_segmentations'
+#Set dir to path to NIfTI segmentation files to be assessed
+dir = r''
 TS_masks = search_files(dir, '*nii.gz')
 
-dir = r'C:\Users\mijan\Desktop\Summer Research\rsna-cspine-segmentations'
+#Re-set dir to path to ground truth files (in .nii format)
+dir = r''
 GT_files = search_files(dir, '*.nii')
 
 total_iou = 0
 segment_IOU = 0
 
-#writing a new csv file in which I'll add the IOU data for the patients
+#writing a new csv file in which the IOU data for the patients will be added
 with open('Total_segmentator_IOU_data.csv', 'w', newline='') as csvfile:
     fieldnames = ['Patient id #', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'T1']
     writer = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
