@@ -8,4 +8,4 @@ MedSAM's original code can be found on their Github here:
 https://github.com/bowang-lab/MedSAM
 
 For this test I used MedSAM's code on GoogleColab (https://colab.research.google.com/drive/19WNtRMbpsxeqimBlmJwtd1dzpaIvK2FZ?usp=sharing) but edited to allow for automatic segmentation of whole .npz files
-The edited code (ran on GoogleColab) can be found in this Github repository named "MedSAM_inference.ipynb"
+The edited code (ran on GoogleColab) can be found in this Github repository named "MedSAM_inference.ipynb" along with the edited code for preprocessing the patient's CT images (CT_preprocessing_1024.ipynb)
