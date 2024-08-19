@@ -1,3 +1,5 @@
+#Extracts bounding box coordinates to be given as input to MedSAM box prompt during segmentation
+
 import nibabel as nib
 import numpy as np
 import os
@@ -11,7 +13,8 @@ def search_files(directory, pattern):
             matches.append(os.path.join(root, filename))
     return matches
 
-dir = r'C:\Users\mijan\Desktop\Summer Research\rsna-cspine-segmentations'
+#dir = path to ground truth files
+dir = r""
 GT_files = search_files(dir, '*.nii')
 
 for i in GT_files:
