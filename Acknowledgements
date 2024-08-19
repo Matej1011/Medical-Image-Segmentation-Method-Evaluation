@@ -1,0 +1,11 @@
+The dataset used for this evaluation of MedSAM and TotalSegmentator is from "The RSNA Cervical Spine Fracture CT Dataset" found here:
+https://pubs.rsna.org/doi/10.1148/ryai.230034
+
+The code for TotalSegmentator can be found on their Github here:
+https://github.com/wasserth/TotalSegmentator/blob/master/README.md
+
+MedSAM's original code can be found on their Github here:
+https://github.com/bowang-lab/MedSAM
+
+For this test I used MedSAM's code on GoogleColab (https://colab.research.google.com/drive/19WNtRMbpsxeqimBlmJwtd1dzpaIvK2FZ?usp=sharing) but edited to allow for automatic segmentation of whole .npz files
+The edited code (ran on GoogleColab) can be found in this Github repository named "MedSAM.py"
