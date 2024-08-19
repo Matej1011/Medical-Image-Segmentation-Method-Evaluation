@@ -1,3 +1,6 @@
+#This program was used temporarily to test the evaluation of .npy files
+#Originally, MedSAM's preprocessing program output .npy files and this code was used before editing the preprocessing code to output .npz files
+
 import nibabel as nib
 import numpy as np
 import os
@@ -12,7 +15,8 @@ def search_files(directory, pattern):
             matches.append(os.path.join(root, filename))
     return matches
 
-dir = r"C:\Users\mijan\Desktop\Summer Research\10633_segmented_MedSAM\data"
+#dir = path to npy files
+dir = r""
 MedSAM_masks = search_files(dir, '*.npy')
 
 dir = r'C:\Users\mijan\Desktop\Summer Research\rsna-cspine-segmentations'
