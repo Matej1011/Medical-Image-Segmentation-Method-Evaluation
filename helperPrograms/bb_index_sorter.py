@@ -1,3 +1,8 @@
+#This is bounding box index sorter
+#It is meant to speed up MedSAM segmentation
+#It creats a csv file that has the patient id # and it's location in the csv file created by coor_extractor
+#This is meant to eliminate the need to search coor_extractor when running MedSAM for bounding box info
+
 import nibabel as nib
 import numpy as np
 import os
@@ -11,7 +16,8 @@ def search_files(directory, pattern):
             matches.append(os.path.join(root, filename))
     return matches
 
-dir = r'C:\Users\mijan\Desktop\Summer Research\rsna-cspine-segmentations'
+#dir = path to ground truth files (saved as .nii)
+dir = r""
 GT_files = search_files(dir, '*.nii')
 
 def read_bb_data(row, data):
